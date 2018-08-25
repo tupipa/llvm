@@ -195,6 +195,8 @@ if [ "$DOCKER_TAG" != "" ]; then
 fi
 
 echo "Building ${DOCKER_REPOSITORY}${DOCKER_TAG} from $IMAGE_SOURCE"
+buildCMD="docker build -t \"${DOCKER_REPOSITORY}${DOCKER_TAG}\" --build-arg \"checkout_args=$CHECKOUT_ARGS\" --build-arg \"buildscript_args=$BUILDSCRIPT_ARGS\" -f \"$BUILD_DIR/$IMAGE_SOURCE/Dockerfile\" \"$BUILD_DIR\""
+echo "$buildCMD"
 docker build -t "${DOCKER_REPOSITORY}${DOCKER_TAG}" \
   --build-arg "checkout_args=$CHECKOUT_ARGS" \
   --build-arg "buildscript_args=$BUILDSCRIPT_ARGS" \

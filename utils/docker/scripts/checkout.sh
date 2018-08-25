@@ -14,7 +14,7 @@ function show_usage() {
   cat << EOF
 Usage: checkout.sh [options]
 
-Checkout svn sources into /tmp/clang-build/src. Used inside a docker container.
+Checkout svn sources into /root/clang-build/src. Used inside a docker container.
 
 Available options:
   -h|--help           show this help message
@@ -131,7 +131,7 @@ function apply_cherrypicks() {
   popd
 }
 
-CLANG_BUILD_DIR=/tmp/clang-build
+CLANG_BUILD_DIR=/root/clang-build
 
 # Get the sources from svn.
 echo "Checking out sources from svn"
@@ -160,7 +160,7 @@ for LLVM_PROJECT in $LLVM_PROJECTS; do
   apply_cherrypicks "$CHECKOUT_DIR"
 done
 
-CHECKSUMS_FILE="/tmp/checksums/checksums.txt"
+CHECKSUMS_FILE="/root/checksums/checksums.txt"
 
 if [ -f "$CHECKSUMS_FILE" ]; then
   echo "Validating checksums for LLVM checkout..."

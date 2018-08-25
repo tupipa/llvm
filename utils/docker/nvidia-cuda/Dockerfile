@@ -15,20 +15,20 @@ RUN apt-get update && \
         subversion ninja-build && \
     rm -rf /var/lib/apt/lists/*
 
-ADD checksums /tmp/checksums
-ADD scripts /tmp/scripts
+ADD checksums /root/checksums
+ADD scripts /root/scripts
 
 # Checkout the source code.
 ARG checkout_args
-RUN /tmp/scripts/checkout.sh ${checkout_args}
-# Run the build. Results of the build will be available at /tmp/clang-install/.
+RUN /root/scripts/checkout.sh ${checkout_args}
+# Run the build. Results of the build will be available at /root/clang-install/.
 ARG buildscript_args
-RUN /tmp/scripts/build_install_llvm.sh --to /tmp/clang-install ${buildscript_args}
+RUN /root/scripts/build_install_llvm.sh --to /root/clang-install ${buildscript_args}
 
 
 # Stage 2. Produce a minimal release image with build results.
 FROM nvidia/cuda:8.0-devel
 LABEL maintainer "LLVM Developers"
 # Copy clang installation into this container.
-COPY --from=builder /tmp/clang-install/ /usr/local/
+COPY --from=builder /root/clang-install/ /usr/local/
 # C++ standard library and binutils are already included in the base package.

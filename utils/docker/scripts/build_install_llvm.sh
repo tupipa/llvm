@@ -70,7 +70,7 @@ if [ "$CLANG_INSTALL_DIR" == "" ]; then
   exit 1
 fi
 
-CLANG_BUILD_DIR=/tmp/clang-build
+CLANG_BUILD_DIR=/root/clang-build
 
 mkdir -p "$CLANG_INSTALL_DIR"
 
@@ -79,15 +79,35 @@ pushd "$CLANG_BUILD_DIR/build"
 
 # Run the build as specified in the build arguments.
 echo "Running build"
+
+cmakeCMD="cmake -GNinja -DCMAKE_INSTALL_PREFIX=\"$CLANG_INSTALL_DIR\" $CMAKE_ARGS \"$CLANG_BUILD_DIR/src/llvm\""
+echo "run $cmakeCMD"
+
 cmake -GNinja \
   -DCMAKE_INSTALL_PREFIX="$CLANG_INSTALL_DIR" \
   $CMAKE_ARGS \
   "$CLANG_BUILD_DIR/src/llvm"
+
+
+ninjaCMD="ninja $CMAKE_INSTALL_TARGETS"
+echo "run $ninjaCMD"
+
 ninja $CMAKE_INSTALL_TARGETS
 
 popd
 
 # Cleanup.
-rm -rf "$CLANG_BUILD_DIR/build"
+#rm -rf "$CLANG_BUILD_DIR/build"
+echo "clean up ignored, clang build dir at $CLANG_BUILD_DIR"
+
+echo ""
+echo "---------------"
+echo "SUMMARY:"
+echo "cmake COMMAND:"
+echo "$cmakeCMD"
+
+echo "ninja COMMAND:"
+echo "$ninjaCMD"
+echo "---------------"
 
 echo "Done"
